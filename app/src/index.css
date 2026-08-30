@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== 字体系统 ==========
+   标题/UI：几何黑体；正文长文：宋体衬线；代码：等宽 */
+:root {
+  --font-sans: "Inter", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Consolas", monospace;
+
+  /* 深色（深空）为默认主题 */
+  --bg: #0d0f14;
+  --bg-soft: #131722;
+  --bg-card: #151a26;
+  --ink: #eef1f7;
+  --ink-2: #a8b3c7;
+  --ink-3: #6b7690;
+  --line: #242b3d;
+  --glow-opacity: 0.5;
+}
+
+.light {
+  /* 浅色：暖纸阅读面 */
+  --bg: #f6f3ec;
+  --bg-soft: #efeadd;
+  --bg-card: #fffdf7;
+  --ink: #23262e;
+  --ink-2: #565d6e;
+  --ink-3: #8a8fa0;
+  --line: #ddd5c4;
+  --glow-opacity: 0.25;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+::selection { background: #3245ff66; }
+
+.font-serif-sc { font-family: var(--font-serif); }
+.font-mono-sc { font-family: var(--font-mono); }
+
+/* ========== 星尘材质 ==========
+   径向渐变光斑 + 遮罩，营造深空尘埃氛围 */
+.stardust {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.stardust::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(ellipse 42% 30% at 22% 30%, #3245ff2e, transparent 70%),
+    radial-gradient(ellipse 36% 26% at 78% 20%, #8d46e726, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 60% 80%, #4bf3c81a, transparent 70%);
+  filter: blur(10px);
+}
+.light .stardust::before {
+  background:
+    radial-gradient(ellipse 42% 30% at 22% 30%, #3245ff14, transparent 70%),
+    radial-gradient(ellipse 36% 26% at 78% 20%, #ff7d5412, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 60% 80%, #4bf3c810, transparent 70%);
+}
+
+/* 静态星点层（CSS 绘制，无图片请求） */
+.starfield {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--glow-opacity);
+  background-image:
+    radial-gradient(1px 1px at 12% 24%, #ffffffcc, transparent),
+    radial-gradient(1.5px 1.5px at 34% 70%, #ffffff99, transparent),
+    radial-gradient(1px 1px at 52% 16%, #ffffffbb, transparent),
+    radial-gradient(2px 2px at 68% 44%, #ffffff88, transparent),
+    radial-gradient(1px 1px at 84% 66%, #ffffffaa, transparent),
+    radial-gradient(1.5px 1.5px at 90% 12%, #ffffff77, transparent),
+    radial-gradient(1px 1px at 44% 88%, #ffffff99, transparent),
+    radial-gradient(1px 1px at 6% 58%, #ffffff88, transparent),
+    radial-gradient(1.5px 1.5px at 26% 44%, #ffffff66, transparent),
+    radial-gradient(1px 1px at 76% 86%, #ffffff99, transparent);
+}
+.light .starfield { opacity: 0; }
+
+/* 深空窗口：星图容器在浅色模式下也保持深空底——太空永远是黑的 */
+.space-panel {
+  background: #0d0f14;
+  border: 1px solid #242b3d;
+}
+.space-panel .starfield { opacity: 0.6 !important; }
+
+/* 呼吸浮动的星点动画 */
+@keyframes star-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ========== 文章排版（prose） ========== */
+.prose-sc { font-family: var(--font-serif); line-height: 1.9; font-size: 1.05rem; color: var(--ink); }
+.prose-sc h2 {
+  font-family: var(--font-sans);
+  font-size: 1.4rem; font-weight: 600;
+  margin: 2.2em 0 0.8em;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--domain, #4bf3c8);
+  letter-spacing: 0.02em;
+}
+.prose-sc p { margin: 1em 0; color: var(--ink-2); }
+.prose-sc ul, .prose-sc ol { margin: 1em 0; padding-left: 1.5em; color: var(--ink-2); }
+.prose-sc li { margin: 0.4em 0; }
+.prose-sc strong { color: var(--ink); font-weight: 600; }
+.prose-sc blockquote {
+  margin: 1.5em 0; padding: 0.8em 1.2em;
+  border-left: 3px solid var(--domain, #4bf3c8);
+  background: color-mix(in srgb, var(--domain, #4bf3c8) 6%, transparent);
+  border-radius: 0 8px 8px 0; color: var(--ink-2);
+}
+.prose-sc code {
+  font-family: var(--font-mono); font-size: 0.88em;
+  background: var(--bg-soft); padding: 0.15em 0.45em; border-radius: 5px;
+  color: var(--domain, #4bf3c8);
+}
+.prose-sc pre {
+  background: #0a0c11; border: 1px solid var(--line);
+  border-radius: 12px; padding: 1.2em; overflow-x: auto; margin: 1.5em 0;
+}
+.light .prose-sc pre { background: #23262e; }
+.prose-sc pre code { background: none; padding: 0; color: #d6e2ff; font-size: 0.85rem; line-height: 1.7; }
+.prose-sc table { width: 100%; margin: 1.5em 0; border-collapse: collapse; font-size: 0.95rem; }
+.prose-sc th, .prose-sc td { border-bottom: 1px solid var(--line); padding: 0.6em 0.8em; text-align: left; color: var(--ink-2); }
+.prose-sc th { color: var(--ink); font-family: var(--font-sans); font-weight: 600; }
+
+/* 星芒分隔线 */
+.prose-sc hr { border: none; text-align: center; margin: 2.6em 0 2.2em; }
+.prose-sc hr::after {
+  content: "✦  ·  ✦  ·  ✦";
+  color: var(--domain, #4bf3c8);
+  opacity: 0.45;
+  font-size: 0.75rem;
+  letter-spacing: 0.5em;
+}
+
+/* ⚡ 速览卡片（正文中的 <div class="tldr">） */
+.prose-sc .tldr {
+  font-family: var(--font-sans);
+  font-size: 0.93rem;
+  line-height: 1.75;
+  background: color-mix(in srgb, var(--domain, #4bf3c8) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--domain, #4bf3c8) 32%, transparent);
+  border-radius: 14px;
+  padding: 1em 1.3em;
+  margin: 1.6em 0 2em;
+}
+.prose-sc .tldr strong { color: var(--domain, #4bf3c8); font-size: 1rem; }
+.prose-sc .tldr ul { margin: 0.5em 0 0.2em; padding-left: 1.2em; }
+.prose-sc .tldr li { margin: 0.35em 0; color: var(--ink-2); }
+.prose-sc .tldr b { color: var(--ink); }
+
+/* 正文插图：白底图表配浅边框，圆角留白 */
+.prose-sc img {
+  display: block;
+  max-width: 100%;
+  margin: 1.8em auto 0.6em;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+/* 图注：图片后紧跟的斜体段落 */
+.prose-sc img + p,
+.prose-sc p > em:only-child {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--ink-3);
+  margin-top: 0.4em;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* 全局搜索关键词高亮 */
+mark {
+  background: color-mix(in srgb, #f8e42e 35%, transparent);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+}
